@@ -54,7 +54,7 @@ SMODS.Consumable{
 	end
 }
 
--- Za Warudo
+-- Za Warudo (this crashes the game as of right now LMFAO)
 SMODS.Atlas{
     key = "zawarudo",
     path = "lean.png", -- placeholder

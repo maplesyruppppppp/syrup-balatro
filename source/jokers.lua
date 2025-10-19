@@ -526,7 +526,7 @@ SMODS.Joker{
 -- Green Cane's Meal
 SMODS.Atlas{
     key = "canesjoker",
-    path = "jokers/greencanes.png", -- placeholder
+    path = "jokers/greencanes.png",
     px = 71,
     py = 95
 }
@@ -573,6 +573,79 @@ SMODS.Joker{
                 chip_mod = card.ability.extra.chips_total,
                 message = "+" .. card.ability.extra.chips_total .. " Chips",
             }
+        end
+    end,
+
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end
+}
+
+-- Idiot
+SMODS.Atlas{
+    key = "idiotjoker",
+    path = "jokers/greencanes.png", -- placeholder
+    px = 71,
+    py = 95
+}
+
+SMODS.Joker{
+    key = "idiotjoker",
+    loc_txt = {
+        name = "Idiot",
+        text = {
+            "At the start of each hand, there's a 25% chance",
+            "this joker will halve your current score and call you an idiot.",
+            "If it doesn't trigger, your {C:red}Mult{} will be doubled instead."
+        }
+    },
+    atlas = "idiotjoker",
+    rarity = 2,
+    cost = 10,
+
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+
+    config = {
+        extra = {
+            mult_double = 2
+        }
+    },
+
+    pools = {
+        ["SyrupModAddition"] = true
+    },
+
+    loc_vars = function(self, info_queue, center)
+        return {
+            vars = {
+                center.ability.extra.mult_double,
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local chance = pseudorandom('idiotjoker')
+            if chance < 0.25 then
+                if G.GAME.current_round and G.GAME.current_round.score then
+                    G.GAME.current_round.score = math.floor(G.GAME.current_round.score / 2)
+                end
+
+                return {
+                    message = "YOU ARE AN IDIOT!",
+                    colour = G.C.RED,
+                    --sound = "idiot_joker"
+                }
+            else
+                return {
+                    message = "2X Mult",
+                    Xmult_mod = card.ability.extra.mult_double
+                }
+            end
         end
     end,
 
